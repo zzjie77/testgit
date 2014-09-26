@@ -20,6 +20,8 @@ git reset --hard commit_id #版本回退，也可回到未来，通过git reflog查看未来版本
 
 比较最新版本与工作区的1.txt
 git diff HEAD -- 1.txt
+git diff HEAD  比较所有文件不同
+git diff --staged  比较多次add后，index区域的变化
 
 第一次修改 -> add -> 第二次修改 -> commit   #第二次修改没有add,所以commit的时候不会提交第二次修改
 
@@ -36,7 +38,7 @@ $ ssh-keygen -t rsa -C "youremail@example.com"   生成ssh key
 
 
 要关联一个远程库，使用命令git remote add origin git@server-name:path/repo-name.git；
-关联后，使用命令git push -u origin master第一次推送master分支的所有内容；
+关联后，使用命令git push -u origin master第一次推送master分支的所有内容；#使用-u可以记住参数，下次可以直接git push
 此后，每次本地提交后，只要有必要，就可以使用命令git push origin master推送最新修改；
 
 Git支持多种协议，包括https，但通过ssh支持的原生git协议速度最快
