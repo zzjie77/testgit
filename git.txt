@@ -1,3 +1,21 @@
+$ git config --global user.name "Your Name"
+$ git config --global user.email "email@example.com"
+$ cat ~/.gitconfig
+
+#修改和新增件都要
+$ git add filename
+$ git commit -m ""
+
+$ git log --pretty=oneline
+
+HEAD表示当前版本, 上一个版本就是HEAD^，上上一个版本就是HEAD^^,当然往上100个版本写成HEAD~100
+$ git reset --hard HEAD^  #回退到上一个版本
+
+HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令git reset --hard commit_id。
+穿梭前，用git log可以查看提交历史，以便确定要回退到哪个版本。
+要重返未来，用git reflog查看命令历史，以便确定要回到未来的哪个版本。
+
+
 git reset --hard commit_id #版本回退，也可回到未来，通过git reflog查看未来版本
 
 比较最新版本与工作区的1.txt
@@ -42,4 +60,46 @@ git log --graph --pretty=oneline --abbrev-commit
 当手头工作没有完成时，先把工作现场git stash一下，然后去修复bug，修复后，再git stash pop，回到工作现场。
 
 
+查看远程库信息，使用git remote -v；
+本地新建的分支如果不推送到远程，对其他人就是不可见的；
+从本地推送分支，使用git push origin branch-name，如果推送失败，先用git pull抓取远程的新提交；
+在本地创建和远程分支对应的分支，使用git checkout -b branch-name origin/branch-name，本地和远程分支的名称最好一致；
+建立本地分支和远程分支的关联，使用git branch --set-upstream branch-name origin/branch-name；
+从远程抓取分支，使用git pull，如果有冲突，要先处理冲突。
 
+命令git tag name用于新建一个标签，默认为HEAD，也可以指定一个commit id；如git tag v0.9 6224937
+-a tagname -m "blablabla..."可以指定标签信息；
+-s tagname -m "blablabla..."可以用PGP签名标签；
+命令git tag可以查看所有标签；
+
+命令git push origin tagname可以推送一个本地标签；
+命令git push origin --tags可以推送全部未推送过的本地标签；
+命令git tag -d tagname可以删除一个本地标签；
+命令git push origin :refs/tags/tagname可以删除一个远程标签。
+
+$ git config --global color.ui true
+
+忽略某些文件时，需要编写.gitignore。
+.gitignore文件本身要放到版本库里，并且可以对.gitignore做版本管理！
+GitHub已经为我们准备了各种配置文件：https://github.com/github/gitignore
+#java
+*.class
+*.jar
+*.war
+*.ear
+
+$ git config --global alias.co checkout
+$ git config --global alias.ci commit
+$ git config --global alias.br branch
+
+搭建git服务器：
+$ sudo apt-get install git
+$ sudo adduser git
+收集所有需要登录的用户的公钥，就是他们自己的id_rsa.pub文件，把所有公钥导入到/home/git/.ssh/authorized_keys文件里，一行一个
+$ sudo git init --bare sample.git #Git就会创建一个裸仓库，裸仓库没有工作区，因为服务器上的Git仓库纯粹是为了共享
+$ sudo chown -R git:git sample.git
+编辑/etc/passwd
+git:x:1001:1001:,,,:/home/git:/usr/bin/git-shell   #将/bin/bash换掉，不允许登录shell
+
+要方便管理公钥，用Gitosis；人少的团队可以直接拷贝ssh-key
+要像SVN那样变态地控制权限，用Gitolite。
